@@ -2,3 +2,5 @@
 *.exe
 .DS_Store
 *.plist
+*.json
+inp.txt

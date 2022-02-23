@@ -8,19 +8,18 @@
 #include <queue>
 #include <map>
 #include <set>
-// #define ll int long long
+#include <cstring>
 typedef long long ll;
 using namespace std;
+const int mod = 1e9+7;
 
 
 int main(){
-    int t;
-    while(cin >> t){
-        ll n;
-        cin >> n;
-
-    }
-
-
+    int n;
+    cin >> n;
+    vector<ll> arr(n);
+    for(int i=0; i<n; i++)
+        cin >> arr[i];
+   
     return 0;
 }

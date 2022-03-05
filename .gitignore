@@ -4,4 +4,4 @@
 *.plist
 *.json
 inp.txt
-.vscode/*
+.vscode/

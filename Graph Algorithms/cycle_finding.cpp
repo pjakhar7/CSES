@@ -9,99 +9,89 @@
 #include <map>
 #include <set>
 #include <cstring>
-// #define ll ll long long
-typedef long long ll;
+#include <tuple>
+
 using namespace std;
 
-ll dist[2502];
-    
-void dfs(int s, vector<pair<ll, ll>> adjl[], int n, bool visited[], int start, vector<int> path, vector<int> &res, ll cyclesum){
-    
-    path.push_back(s);
-    if(s==start && path.size()>1 && cyclesum<0 ){
-        // cout << path.size()<<endl;
-        // for(auto x: path)
-        //     cout << x << " ";
-        // cout << endl;
-        res = path;
-        return ;
-    }
-    // cout << path.size()<<endl;
-    // for(auto x: path)
-    //     cout << x << " ";
-    // cout << endl;
-    visited[s] = true;
-    for(auto t: adjl[s]){
-        if(t.first==start)
-            dfs(t.first, adjl, n, visited, start, path, res, cyclesum+t.second);
-        if(!visited[t.second] ){
-            dfs(t.first, adjl, n, visited, start, path, res, cyclesum+t.second);
-        }
-    }
+#define vi vector<int>
+#define pii pair<int,int>
+#define pb push_back
+#define F first
+#define S second
+#define sz size()
+#define NL cout << "\n";
+#define loop(i, a, b) for(int i=a; i<b; i++)
+#define loopr(i, a, b) for(int i=a; i>b; i--)
+#define geta(A, a, b) for(int i=a; i<b; i++){cin >> A[i];}
+#define getv(v, a, b) for(int i=a; i<b; i++){int x; cin >> x; v.push_back(x);}
+#define gets(s, a, b) for(int i=a; i<b; i++){int x; cin >> x; s.insert(x);}
+
+// template<typename... T> 
+// void put(T&... args){
+//     cout << a << " ";
+// }
+template<typename... T>
+void get(T&... args) { ((cin >> args), ...);}
+template<typename... T>
+void put(T&&... args) { ((cout << args << " "), ...);}
+template<typename... T>
+void putl(T&&... args) { ((cout << args << " "), ...); cout<<'\n';}
+
+typedef long long ll;
+typedef long double ld;
+
+const ll mod = 1e9+7;
+const ll inf = 1LL<<60;
+const ld ep = 0.0000001;
+const ld pi = acos(-1.0);
+
+ll dist[2501];
+
+void printcycle(int s, vi &parent, int start){
+    if(s==start)
+        return;
+    printcycle(parent[s], parent, start);
+    put(s);
 }
 
 int main(){
-    ll n, m, q;
-    cin >> n >> m;
-    vector<vector<ll> > edges;
+    ll n, m;
+    get(n);
+    get(m);
+    // put(n);
+    // put(m);
+    vector< tuple<ll,ll,ll> > edges;
     ll x,y,w;
-    for(int i=1; i<=n; i++)
-        dist[i] = INT32_MAX;
-    // cout << n << " " << m << endl;
-    for(ll i=0; i<m; i++){
-        vector<ll> t(3);
-        
+    loop(i, 0, m){
         cin >> x >> y >> w;
-        t[0] = x;
-        t[1] = y;
-        t[2] = w;
-        edges.push_back(t);
+        edges.pb(make_tuple(x,y,w));
     }
+    loop(i, 0, n+1)
+        dist[i] = inf;
     dist[1] = 0;
-    for(int i=1; i<n; i++){
-        for(int j=0; j<m; j++){
-            vector<ll> t = edges[j];
-        // cout << t[0] <<" " << t[1] << " " << t[2] << endl;
-            if( dist[t[1]]!=INT32_MAX && dist[t[0]]!=INT32_MAX)
-                dist[t[1]] = min(dist[t[1]], dist[t[0]]+t[2]);
-            else if(dist[t[1]]==INT32_MAX && dist[t[0]]!=INT32_MAX)
-                dist[t[1]] = dist[t[0]]+t[2];
-
-        // for(int i=1; i<=n; i++)
-        //     cout << dist[i] << " ";
-        // cout << endl;
+    vector<int> parent(n+1, -1);
+    int change = 0;
+    loop(i, 1, n+1){
+        change = 0;
+        for(auto [x,y,w]: edges){
+            if(dist[y]>dist[x]+w){
+                dist[y] = dist[x] + w;
+                parent[y] = x;
+                change = y;
+            }
         }
     }
-    ll res = dist[n] ;
-    vector<int> changes;
-    for(int i=0; i<m; i++){
-        vector<ll> t = edges[i];
-        ll old = dist[t[1]];
-        if(dist[t[1]]!=INT32_MAX && dist[t[0]]!=INT32_MAX)
-            dist[t[1]] = min(dist[t[1]], dist[t[0]]+t[2]);            
-        else if(dist[t[1]]==INT32_MAX && dist[t[0]]!=INT32_MAX)
-            dist[t[1]] = dist[t[0]]+t[2];
-        if(old!=dist[t[1]])
-            changes.push_back(t[1]);
+    if(!change){
+        putl("NO");
+        return 0;
     }
-    vector<pair<ll, ll> > adjl[n+1];
-    for(auto t: edges)
-        adjl[t[0]].push_back(make_pair(t[1], t[2]));
-    bool visited[n+1];
-    memset(visited, false, sizeof(visited));
-    
-    if(changes.size()){
-        vector<int> ans;
-        vector<int> path;
-        dfs(changes[0], adjl, n, visited, changes[0], path, ans, 0);
-        cout << "YES\n";
-        for(auto x: ans)
-            cout << x << " ";
-        cout << endl;
-    }
-    else{
-        cout << "NO\n"; 
-    }
-
+    vi ans;
+    loop(i, 0, n)
+        change = parent[change];
+    putl("YES");
+    put(change);
+    printcycle(parent[change], parent, change);
+    put(change);
+    put("\n");
     return 0;
 }

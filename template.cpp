@@ -10,11 +10,14 @@
 #include <set>
 #include <cstring>
 #include <tuple>
+#include <stack>
 
 using namespace std;
 
 #define vi vector<int>
+#define vl vector<ll>
 #define pii pair<int,int>
+#define pll pair<ll,ll>
 #define pb push_back
 #define F first
 #define S second
@@ -25,6 +28,7 @@ using namespace std;
 #define geta(A, a, b) for(int i=a; i<b; i++){cin >> A[i];}
 #define getv(v, a, b) for(int i=a; i<b; i++){int x; cin >> x; v.push_back(x);}
 #define gets(s, a, b) for(int i=a; i<b; i++){int x; cin >> x; s.insert(x);}
+#define seea(A, a, b) for(int i=a; i<b; i++){cout << A[i];}
 
 // template<typename... T> 
 // void put(T&... args){

@@ -48,10 +48,47 @@ const ll mod = 1e9+7;
 const ll inf = 1LL<<60;
 const ld ep = 0.0000001;
 const ld pi = acos(-1.0);
+int n;
 
+void dfs(ll s, vi edges[], vi &visited, vl &depth, ll &res){
+    ll curdia = 1;
+    ll maxdepth = 0;
+    visited[s] = 1;
+    priority_queue<ll> pq;
+    loop(i, 0, edges[s].size()){
+        ll k = edges[s][i];
+        if(!visited[k]){
+            dfs(k, edges, visited, depth, res);
+            pq.push(depth[k]);
+        }
+    }
+    if(!pq.empty()){
+        depth[s] = pq.top()+1;
+        pq.pop();
+    }    
+    else 
+        depth[s] = 1;
+    if(!pq.empty()){
+        res = max(res, depth[s]+pq.top());
+        return ;
+    }
+    res = max(res, depth[s]);
+}
 
 int main(){
-    int n;
     cin >> n;
+    vi edges[n+1];
+    ll a,b;
+
+    loop(i, 0, n-1){
+        cin >> a >> b; 
+        edges[a].pb(b);
+        edges[b].pb(a);
+    }
+    vi visited(n+1, 0);
+    vl depth(n+1, 0);
+    ll res=0;
+    dfs(1, edges, visited, depth, res);
+    putl(res-1);
     return 0;
 }

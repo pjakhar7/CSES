@@ -49,9 +49,29 @@ const ll inf = 1LL<<60;
 const ld ep = 0.0000001;
 const ld pi = acos(-1.0);
 
+ll finmatch(int s, vi adjl[]){
+    int leafnodes = 0;
+    int res = 0;
+    loop(i, 0, adjl[s].size()){
+        if(adjl[adjl[s][i]].size()==0)
+            leafnodes++;
+        else{
+            res += finmatch(adjl[s][i], adjl);
+        }
+    }
+    res += (leafnodes>0);
+    return res;
+}
 
 int main(){
     int n;
     cin >> n;
+    vi adjl[n+1];
+    int a, b;
+    loop(i, 0, n){
+        cin >> a >> b;
+        adjl[a].push_back(b);
+    }
+    putl(finmatch(1, adjl));
     return 0;
 }

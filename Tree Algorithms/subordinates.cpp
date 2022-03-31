@@ -49,9 +49,31 @@ const ll inf = 1LL<<60;
 const ld ep = 0.0000001;
 const ld pi = acos(-1.0);
 
+int subordinates[2*(int)1e5+2];
+
+int bfs(int s, vi adjlist[]){
+    int res = 0;
+    loop(i,0,adjlist[s].size()){
+        res++;
+        res += bfs(adjlist[s][i], adjlist);
+    }
+    subordinates[s] = res;
+    return res;
+}
+
 
 int main(){
     int n;
     cin >> n;
+    vl arr(n+1);
+    vi adjlist[n+1];
+    memset(subordinates, 0 , sizeof(subordinates));
+    int x;
+    for(int i=2; i<=n; i++){
+        cin >> x;
+        adjlist[x].push_back(i);
+    }
+    bfs(1, adjlist);
+    seea(subordinates, 1, n+1);    
     return 0;
 }
